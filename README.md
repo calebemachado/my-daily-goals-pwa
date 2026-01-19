@@ -88,4 +88,4 @@ app/
 
 ## Contributing
 
-Found a bug or have a feature request? [Open an issue](https://github.com/Clsax/my-daily-goals/issues/new) on GitHub.
+Found a bug or have a feature request? [Open an issue](https://github.com/calebemachado/my-daily-goals-pwa/issues/new) on GitHub.
