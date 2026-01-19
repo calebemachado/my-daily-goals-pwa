@@ -1,19 +1,17 @@
 "use client";
 
 import {
-  BarChart,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
   Line,
   ComposedChart,
 } from "recharts";
 import type { PeriodStats } from "@/app/lib/db/stats";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface CompletionChartProps {
   data: PeriodStats[];
@@ -22,10 +20,29 @@ interface CompletionChartProps {
 export function CompletionChart({ data }: CompletionChartProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        const { width, height } = containerRef.current.getBoundingClientRect();
+        setDimensions({ width, height });
+      }
+    };
+
+    updateDimensions();
+    const resizeObserver = new ResizeObserver(updateDimensions);
+    resizeObserver.observe(containerRef.current);
+
+    return () => resizeObserver.disconnect();
+  }, [mounted]);
 
   if (!mounted) {
     return (
@@ -55,9 +72,16 @@ export function CompletionChart({ data }: CompletionChartProps) {
   }
 
   return (
-    <div className="h-64 w-full rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
-      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-        <ComposedChart data={data}>
+    <div
+      ref={containerRef}
+      className="h-64 w-full rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900"
+    >
+      {dimensions.width > 0 && dimensions.height > 0 ? (
+        <ComposedChart
+          data={data}
+          width={dimensions.width - 32}
+          height={dimensions.height - 32}
+        >
           <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
           <XAxis
             dataKey="label"
@@ -109,7 +133,7 @@ export function CompletionChart({ data }: CompletionChartProps) {
             name="rate"
           />
         </ComposedChart>
-      </ResponsiveContainer>
+      ) : null}
     </div>
   );
 }
