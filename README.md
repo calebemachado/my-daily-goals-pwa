@@ -85,3 +85,7 @@ app/
 - One-time goals archive immediately on completion
 - Repeated goals reset to unchecked each new day
 - Past days are viewable but read-only
+
+## Contributing
+
+Found a bug or have a feature request? [Open an issue](https://github.com/Clsax/my-daily-goals/issues/new) on GitHub.
