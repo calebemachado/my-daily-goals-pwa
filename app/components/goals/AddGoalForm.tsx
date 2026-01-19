@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import type { GoalType } from "@/app/lib/db/types";
 import { Input } from "@/app/components/ui/Input";
 import { Modal } from "@/app/components/ui/Modal";
+import { useTranslation } from "@/app/lib/i18n";
 
 interface AddGoalFormProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface AddGoalFormProps {
 }
 
 export function AddGoalForm({ isOpen, onClose, onAdd }: AddGoalFormProps) {
+  const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [type, setType] = useState<GoalType>("repeated");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,13 +44,13 @@ export function AddGoalForm({ isOpen, onClose, onAdd }: AddGoalFormProps) {
     <Modal isOpen={isOpen} onClose={handleClose}>
       <form onSubmit={handleSubmit}>
         <h2 className="mb-6 text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-          Add new goal
+          {t.goals.addNewGoal}
         </h2>
 
         <Input
           ref={inputRef}
           type="text"
-          placeholder="What do you want to accomplish?"
+          placeholder={t.goals.whatToAccomplish}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="mb-4"
@@ -56,7 +58,7 @@ export function AddGoalForm({ isOpen, onClose, onAdd }: AddGoalFormProps) {
 
         <div className="mb-6">
           <label className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Repeat
+            {t.goals.repeat}
           </label>
           <div className="flex gap-2">
             <button
@@ -68,7 +70,7 @@ export function AddGoalForm({ isOpen, onClose, onAdd }: AddGoalFormProps) {
                   : "border-zinc-200 text-zinc-600 hover:border-zinc-300 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-600"
               }`}
             >
-              Every day
+              {t.goals.everyDay}
             </button>
             <button
               type="button"
@@ -79,7 +81,7 @@ export function AddGoalForm({ isOpen, onClose, onAdd }: AddGoalFormProps) {
                   : "border-zinc-200 text-zinc-600 hover:border-zinc-300 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-600"
               }`}
             >
-              Only today
+              {t.goals.onlyToday}
             </button>
           </div>
         </div>
@@ -90,14 +92,14 @@ export function AddGoalForm({ isOpen, onClose, onAdd }: AddGoalFormProps) {
             onClick={handleClose}
             className="flex-1 rounded-lg border border-zinc-200 px-4 py-3 font-medium text-zinc-600 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
           >
-            Cancel
+            {t.common.cancel}
           </button>
           <button
             type="submit"
             disabled={!title.trim()}
             className="flex-1 rounded-lg bg-zinc-900 px-4 py-3 font-medium text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
           >
-            Add goal
+            {t.goals.addGoal}
           </button>
         </div>
       </form>

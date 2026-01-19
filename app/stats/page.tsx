@@ -8,8 +8,10 @@ import { PeriodSelector } from "@/app/components/stats/PeriodSelector";
 import { StatCard } from "@/app/components/stats/StatCard";
 import { CompletionChart } from "@/app/components/stats/CompletionChart";
 import { BottomNav } from "@/app/components/navigation/BottomNav";
+import { useTranslation } from "@/app/lib/i18n";
 
 export default function StatsPage() {
+  const { t } = useTranslation();
   const [periodType, setPeriodType] = useState<PeriodType>("monthly");
 
   const { isReady } = useDB();
@@ -43,7 +45,7 @@ export default function StatsPage() {
     <div className="min-h-screen bg-zinc-50 px-4 pb-24 pt-16 dark:bg-black">
       <div className="mx-auto w-full max-w-lg">
         <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-          Statistics
+          {t.stats.title}
         </h1>
 
         <div className="mb-6">
@@ -52,30 +54,30 @@ export default function StatsPage() {
 
         <div className="mb-6 flex gap-3">
           <StatCard
-            title="Goals Completed"
+            title={t.stats.goalsCompleted}
             value={totals.completed}
-            subtitle={`of ${totals.total} possible`}
+            subtitle={t.stats.ofPossible.replace("{total}", String(totals.total))}
           />
           <StatCard
-            title="Completion Rate"
+            title={t.stats.completionRate}
             value={`${totals.rate}%`}
-            subtitle="overall average"
+            subtitle={t.stats.overallAverage}
           />
         </div>
 
         <div className="mb-4">
           <h2 className="mb-3 text-sm font-medium text-zinc-600 dark:text-zinc-400">
-            {periodType === "monthly" && "Goals completed per month"}
-            {periodType === "quarterly" && "Goals completed per quarter"}
-            {periodType === "semiannual" && "Goals completed per semester"}
-            {periodType === "annual" && "Goals completed per year"}
+            {periodType === "monthly" && t.stats.goalsPerMonth}
+            {periodType === "quarterly" && t.stats.goalsPerQuarter}
+            {periodType === "semiannual" && t.stats.goalsPerSemester}
+            {periodType === "annual" && t.stats.goalsPerYear}
           </h2>
           <CompletionChart data={stats} />
         </div>
 
         <div className="mt-6 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
           <h3 className="mb-3 text-sm font-medium text-zinc-600 dark:text-zinc-400">
-            Breakdown
+            {t.stats.breakdown}
           </h3>
           <div className="space-y-2">
             {stats.map((stat) => (
@@ -88,7 +90,7 @@ export default function StatsPage() {
                 </span>
                 <div className="flex items-center gap-4">
                   <span className="text-sm text-zinc-500 dark:text-zinc-400">
-                    {stat.completed} completed
+                    {stat.completed} {t.stats.completed}
                   </span>
                   <span
                     className={`text-sm font-medium ${

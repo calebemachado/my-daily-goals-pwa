@@ -12,12 +12,14 @@ import {
 import type { PeriodStats } from "@/app/lib/db/stats";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "@/app/lib/i18n";
 
 interface CompletionChartProps {
   data: PeriodStats[];
 }
 
 export function CompletionChart({ data }: CompletionChartProps) {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -66,7 +68,7 @@ export function CompletionChart({ data }: CompletionChartProps) {
   if (data.length === 0) {
     return (
       <div className="flex h-64 items-center justify-center rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <p className="text-zinc-500 dark:text-zinc-400">No data available</p>
+        <p className="text-zinc-500 dark:text-zinc-400">{t.stats.noDataAvailable}</p>
       </div>
     );
   }
@@ -112,8 +114,8 @@ export function CompletionChart({ data }: CompletionChartProps) {
             }}
             labelStyle={{ color: colors.text }}
             formatter={(value, name) => {
-              if (name === "rate") return [`${value}%`, "Completion Rate"];
-              return [value, "Goals Completed"];
+              if (name === "rate") return [`${value}%`, t.stats.completionRate];
+              return [value, t.stats.goalsCompleted];
             }}
           />
           <Bar

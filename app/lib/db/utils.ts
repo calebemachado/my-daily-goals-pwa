@@ -10,21 +10,27 @@ export function getDateString(date: Date): string {
   return date.toLocaleDateString("en-CA");
 }
 
-export function formatDisplayDate(dateString: string): string {
+export function formatDisplayDate(
+  dateString: string,
+  locale: "en" | "pt-BR" = "en"
+): string {
   const date = new Date(dateString + "T00:00:00");
   const today = getTodayString();
   const yesterday = getDateString(
     new Date(Date.now() - 24 * 60 * 60 * 1000)
   );
 
+  const todayLabel = locale === "pt-BR" ? "Hoje" : "Today";
+  const yesterdayLabel = locale === "pt-BR" ? "Ontem" : "Yesterday";
+
   if (dateString === today) {
-    return "Today";
+    return todayLabel;
   }
   if (dateString === yesterday) {
-    return "Yesterday";
+    return yesterdayLabel;
   }
 
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString(locale, {
     weekday: "short",
     month: "short",
     day: "numeric",

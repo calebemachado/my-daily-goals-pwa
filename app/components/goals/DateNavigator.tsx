@@ -1,6 +1,7 @@
 "use client";
 
 import { formatDisplayDate, getTodayString } from "@/app/lib/db/utils";
+import { useTranslation } from "@/app/lib/i18n";
 
 interface DateNavigatorProps {
   currentDate: string;
@@ -11,6 +12,7 @@ export function DateNavigator({
   currentDate,
   onDateChange,
 }: DateNavigatorProps) {
+  const { t, locale } = useTranslation();
   const today = getTodayString();
   const isToday = currentDate === today;
 
@@ -35,7 +37,7 @@ export function DateNavigator({
       <button
         onClick={goToPreviousDay}
         className="flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-200 transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-800"
-        aria-label="Previous day"
+        aria-label={t.dates.previousDay}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -55,14 +57,14 @@ export function DateNavigator({
 
       <div className="flex flex-col items-center">
         <span className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          {formatDisplayDate(currentDate)}
+          {formatDisplayDate(currentDate, locale)}
         </span>
         {!isToday && (
           <button
             onClick={goToToday}
             className="mt-1 text-sm text-zinc-500 underline transition-colors hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
           >
-            Go to today
+            {t.dates.goToToday}
           </button>
         )}
       </div>
@@ -75,7 +77,7 @@ export function DateNavigator({
             ? "cursor-not-allowed opacity-30"
             : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
         }`}
-        aria-label="Next day"
+        aria-label={t.dates.nextDay}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

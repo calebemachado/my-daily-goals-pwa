@@ -1,11 +1,14 @@
 "use client";
 
+import { useTranslation } from "@/app/lib/i18n";
+
 interface EmptyStateProps {
   isCurrentDay: boolean;
   onAddGoal?: () => void;
 }
 
 export function EmptyState({ isCurrentDay, onAddGoal }: EmptyStateProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
       <div className="mb-4 text-6xl">
@@ -52,19 +55,17 @@ export function EmptyState({ isCurrentDay, onAddGoal }: EmptyStateProps) {
         )}
       </div>
       <h2 className="mb-2 text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-        {isCurrentDay ? "No goals for today" : "No goals recorded"}
+        {isCurrentDay ? t.goals.noGoalsToday : t.goals.noGoalsRecorded}
       </h2>
       <p className="mb-6 max-w-xs text-zinc-500 dark:text-zinc-400">
-        {isCurrentDay
-          ? "Start by adding your first goal for today"
-          : "There were no goals completed on this day"}
+        {isCurrentDay ? t.goals.startAddingGoal : t.goals.noGoalsOnThisDay}
       </p>
       {isCurrentDay && onAddGoal && (
         <button
           onClick={onAddGoal}
           className="rounded-lg bg-zinc-900 px-6 py-3 font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
         >
-          Add your first goal
+          {t.goals.addFirstGoal}
         </button>
       )}
     </div>

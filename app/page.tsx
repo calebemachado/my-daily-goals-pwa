@@ -9,8 +9,10 @@ import { DateNavigator } from "@/app/components/goals/DateNavigator";
 import { AddGoalButton } from "@/app/components/goals/AddGoalButton";
 import { AddGoalForm } from "@/app/components/goals/AddGoalForm";
 import { BottomNav } from "@/app/components/navigation/BottomNav";
+import { useTranslation } from "@/app/lib/i18n";
 
 export default function Home() {
+  const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(getTodayString());
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
@@ -54,7 +56,7 @@ export default function Home() {
 
         {!isCurrentDay && (
           <div className="mb-4 rounded-lg bg-zinc-100 px-4 py-2 text-center text-sm text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
-            Viewing history - goals are read-only
+            {t.goals.viewingHistory}
           </div>
         )}
 
