@@ -65,17 +65,43 @@ export async function addGoal(
 
 export async function getActiveGoals(): Promise<Goal[]> {
   const db = await openDB();
+  const today = getTodayString();
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction("goals", "readonly");
-    const store = transaction.objectStore("goals");
-    const request = store.getAll();
+    const transaction = db.transaction(["goals", "completions"], "readonly");
+    const goalsStore = transaction.objectStore("goals");
+    const completionsStore = transaction.objectStore("completions");
 
-    request.onsuccess = () => {
-      const goals = request.result as Goal[];
-      resolve(goals.filter((g) => !g.isArchived));
+    const goalsRequest = goalsStore.getAll();
+
+    goalsRequest.onsuccess = () => {
+      const allGoals = goalsRequest.result as Goal[];
+      const completionsIndex = completionsStore.index("by-date");
+      const completionsRequest = completionsIndex.getAll(
+        IDBKeyRange.only(today)
+      );
+
+      completionsRequest.onsuccess = () => {
+        const completions = completionsRequest.result as GoalCompletion[];
+        const completedTodayIds = new Set(completions.map((c) => c.goalId));
+
+        // Include: non-archived goals + archived one-time goals completed today
+        const activeGoals = allGoals.filter((goal) => {
+          if (!goal.isArchived) {
+            return true;
+          }
+          // Show archived one-time goals if completed today (so they appear in completed section)
+          if (goal.type === "one-time" && completedTodayIds.has(goal.id)) {
+            return true;
+          }
+          return false;
+        });
+
+        resolve(activeGoals);
+      };
+      completionsRequest.onerror = () => reject(completionsRequest.error);
     };
-    request.onerror = () => reject(request.error);
+    goalsRequest.onerror = () => reject(goalsRequest.error);
   });
 }
 
@@ -206,21 +232,10 @@ export async function getGoalsForDate(date: string): Promise<Goal[]> {
       );
 
       completionsRequest.onsuccess = () => {
-        const completions = completionsRequest.result as GoalCompletion[];
-        const completedGoalIds = new Set(completions.map((c) => c.goalId));
-
+        // Show ALL goals that existed on that date (created on or before that date)
         const goalsForDate = allGoals.filter((goal) => {
-          // Only show goals that existed on this date
           const goalCreatedDate = goal.createdAt.split("T")[0];
-          if (goalCreatedDate > date) {
-            return false;
-          }
-
-          if (goal.type === "repeated") {
-            return !goal.isArchived;
-          }
-          // One-time goals only show if completed on this date
-          return completedGoalIds.has(goal.id);
+          return goalCreatedDate <= date;
         });
 
         resolve(goalsForDate);

@@ -72,15 +72,16 @@ export function useGoals({ date }: UseGoalsOptions) {
 
       const isNowCompleted = await toggleGoalCompletion(goalId, date);
 
+      // One-time goals stay visible until end of day, just move to completed section
+      setGoals((prev) =>
+        prev.map((g) =>
+          g.id === goalId ? { ...g, isCompletedToday: isNowCompleted } : g
+        )
+      );
+
+      // Archive one-time goals when completed (they'll still show in history)
       if (goal.type === "one-time" && isNowCompleted) {
         await archiveGoal(goalId);
-        setGoals((prev) => prev.filter((g) => g.id !== goalId));
-      } else {
-        setGoals((prev) =>
-          prev.map((g) =>
-            g.id === goalId ? { ...g, isCompletedToday: isNowCompleted } : g
-          )
-        );
       }
     },
     [isCurrentDay, date, goals]

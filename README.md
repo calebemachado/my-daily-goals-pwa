@@ -82,7 +82,7 @@ app/
 ## Key Behaviors
 
 - Only today's goals can be checked/unchecked
-- One-time goals archive immediately on completion
+- One-time goals stay visible until end of day, then disappear
 - Repeated goals reset to unchecked each new day
 - Past days are viewable but read-only
 
