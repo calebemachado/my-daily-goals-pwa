@@ -8,6 +8,7 @@ import { GoalList } from "@/app/components/goals/GoalList";
 import { DateNavigator } from "@/app/components/goals/DateNavigator";
 import { AddGoalButton } from "@/app/components/goals/AddGoalButton";
 import { AddGoalForm } from "@/app/components/goals/AddGoalForm";
+import { BottomNav } from "@/app/components/navigation/BottomNav";
 
 export default function Home() {
   const [selectedDate, setSelectedDate] = useState(getTodayString());
@@ -36,6 +37,7 @@ export default function Home() {
             ))}
           </div>
         </div>
+        <BottomNav />
       </div>
     );
   }
@@ -74,6 +76,7 @@ export default function Home() {
           />
         </>
       )}
+      <BottomNav />
     </div>
   );
 }
