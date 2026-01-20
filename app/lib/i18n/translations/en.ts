@@ -28,6 +28,13 @@ export const en: Translations = {
     noGoalsRecorded: "No goals recorded",
     startAddingGoal: "Start by adding your first goal for today",
     noGoalsOnThisDay: "There were no goals on this day",
+    deleteGoal: "Delete goal",
+    deleteGoalConfirm: "Are you sure you want to delete this goal?",
+    deleteGoalWarningRepeated:
+      "This is a recurring goal. Deleting it will permanently remove it and it will not appear on future days.",
+    deleteGoalWarningOneTime:
+      "This goal and its completion history will be permanently deleted.",
+    delete: "Delete",
   },
 
   dates: {

@@ -28,6 +28,11 @@ export interface Translations {
     noGoalsRecorded: string;
     startAddingGoal: string;
     noGoalsOnThisDay: string;
+    deleteGoal: string;
+    deleteGoalConfirm: string;
+    deleteGoalWarningRepeated: string;
+    deleteGoalWarningOneTime: string;
+    delete: string;
   };
 
   dates: {

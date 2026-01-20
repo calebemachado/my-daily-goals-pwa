@@ -28,6 +28,13 @@ export const ptBR: Translations = {
     noGoalsRecorded: "Nenhuma meta registrada",
     startAddingGoal: "Comece adicionando sua primeira meta para hoje",
     noGoalsOnThisDay: "Nao havia metas neste dia",
+    deleteGoal: "Excluir meta",
+    deleteGoalConfirm: "Tem certeza que deseja excluir esta meta?",
+    deleteGoalWarningRepeated:
+      "Esta e uma meta recorrente. Exclui-la a removera permanentemente e ela nao aparecera nos proximos dias.",
+    deleteGoalWarningOneTime:
+      "Esta meta e seu historico de conclusao serao excluidos permanentemente.",
+    delete: "Excluir",
   },
 
   dates: {

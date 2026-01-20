@@ -8,18 +8,29 @@ import { GoalList } from "@/app/components/goals/GoalList";
 import { DateNavigator } from "@/app/components/goals/DateNavigator";
 import { AddGoalButton } from "@/app/components/goals/AddGoalButton";
 import { AddGoalForm } from "@/app/components/goals/AddGoalForm";
+import { DeleteGoalDialog } from "@/app/components/goals/DeleteGoalDialog";
 import { BottomNav } from "@/app/components/navigation/BottomNav";
 import { useTranslation } from "@/app/lib/i18n";
+import type { GoalWithStatus } from "@/app/lib/db/types";
 
 export default function Home() {
   const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(getTodayString());
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [goalToDelete, setGoalToDelete] = useState<GoalWithStatus | null>(null);
 
   const { isReady } = useDB();
-  const { goals, isLoading, isCurrentDay, addGoal, toggleGoal } = useGoals({
-    date: selectedDate,
-  });
+  const { goals, isLoading, isCurrentDay, addGoal, toggleGoal, removeGoal } =
+    useGoals({
+      date: selectedDate,
+    });
+
+  const handleDeleteGoal = async () => {
+    if (goalToDelete) {
+      await removeGoal(goalToDelete.id);
+      setGoalToDelete(null);
+    }
+  };
 
   if (!isReady || isLoading) {
     return (
@@ -64,6 +75,7 @@ export default function Home() {
           goals={goals}
           isCurrentDay={isCurrentDay}
           onToggle={toggleGoal}
+          onDelete={setGoalToDelete}
           onAddGoal={() => setIsAddModalOpen(true)}
         />
       </div>
@@ -75,6 +87,12 @@ export default function Home() {
             isOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
             onAdd={addGoal}
+          />
+          <DeleteGoalDialog
+            isOpen={goalToDelete !== null}
+            onClose={() => setGoalToDelete(null)}
+            onConfirm={handleDeleteGoal}
+            goal={goalToDelete}
           />
         </>
       )}

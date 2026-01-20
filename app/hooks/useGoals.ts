@@ -5,6 +5,7 @@ import type { Goal, GoalType, GoalWithStatus } from "@/app/lib/db/types";
 import {
   addGoal as dbAddGoal,
   archiveGoal,
+  deleteGoal as dbDeleteGoal,
   getActiveGoals,
   getCompletionsForDate,
   getGoalsForDate,
@@ -87,6 +88,16 @@ export function useGoals({ date }: UseGoalsOptions) {
     [isCurrentDay, date, goals]
   );
 
+  const removeGoal = useCallback(
+    async (goalId: string) => {
+      if (!isCurrentDay) return;
+
+      await dbDeleteGoal(goalId);
+      setGoals((prev) => prev.filter((g) => g.id !== goalId));
+    },
+    [isCurrentDay]
+  );
+
   const refreshGoals = useCallback(() => {
     loadGoals();
   }, [loadGoals]);
@@ -97,6 +108,7 @@ export function useGoals({ date }: UseGoalsOptions) {
     isCurrentDay,
     addGoal,
     toggleGoal,
+    removeGoal,
     refreshGoals,
   };
 }

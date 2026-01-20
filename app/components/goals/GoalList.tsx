@@ -9,6 +9,7 @@ interface GoalListProps {
   goals: GoalWithStatus[];
   isCurrentDay: boolean;
   onToggle: (goalId: string) => void;
+  onDelete?: (goal: GoalWithStatus) => void;
   onAddGoal?: () => void;
 }
 
@@ -16,6 +17,7 @@ export function GoalList({
   goals,
   isCurrentDay,
   onToggle,
+  onDelete,
   onAddGoal,
 }: GoalListProps) {
   const { t } = useTranslation();
@@ -36,6 +38,7 @@ export function GoalList({
               key={goal.id}
               goal={goal}
               onToggle={() => onToggle(goal.id)}
+              onDelete={onDelete}
               disabled={!isCurrentDay}
             />
           ))}
@@ -56,6 +59,7 @@ export function GoalList({
               key={goal.id}
               goal={goal}
               onToggle={() => onToggle(goal.id)}
+              onDelete={onDelete}
               disabled={!isCurrentDay}
             />
           ))}
